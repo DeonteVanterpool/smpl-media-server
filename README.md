@@ -16,6 +16,11 @@ additional navigation or surrounding content:
 The planned supported formats are MP3, MP4, PNG, and JPG. Uploads will require
 username and password authentication.
 
+The proposed API is documented in [openapi.yaml](openapi.yaml). It specifies
+an authenticated multipart upload and an unauthenticated file listing. An
+OpenAPI UI can provide the username/password authorization and file picker for
+the upload.
+
 ## Status
 
 This repository currently contains the project plan only. The server,

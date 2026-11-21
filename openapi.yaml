@@ -1,0 +1,81 @@
+openapi: 3.0.3
+info:
+  title: smpl-media-server API
+  version: 1.0.0
+  description: |
+    Proposed API for uploading and listing media. The server and these
+    endpoints have not yet been implemented.
+paths:
+  /upload:
+    post:
+      summary: Upload a media file
+      description: |
+        Authenticate with a username and password using HTTP Basic authentication.
+        Use HTTPS to protect credentials in transit. Supported formats are MP3,
+        MP4, PNG, and JPG.
+      operationId: uploadFile
+      security:
+        - basicAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - file
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: Media file to upload.
+      responses:
+        '201':
+          description: File uploaded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MediaFile'
+        '400':
+          description: Missing or invalid file.
+        '401':
+          description: Missing or invalid credentials.
+        '415':
+          description: Unsupported media format.
+  /files:
+    get:
+      summary: List uploaded media files
+      operationId: listFiles
+      security: []
+      responses:
+        '200':
+          description: List of uploaded files.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MediaFile'
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+  schemas:
+    MediaFile:
+      type: object
+      required:
+        - id
+        - filename
+        - mediaType
+      properties:
+        id:
+          type: string
+          description: Unique media ID.
+        filename:
+          type: string
+          description: Name of the uploaded file.
+        mediaType:
+          type: string
+          description: MIME type of the uploaded file.
+          example: image/png
